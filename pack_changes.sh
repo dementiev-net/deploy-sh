@@ -99,9 +99,9 @@ if zip -r "$GIT_REPO_PATH/$OUTPUT_DIR/$ZIP_NAME" . > /dev/null 2>&1; then
     # Создаем файл с информацией о коммите
     cat > "$GIT_REPO_PATH/$OUTPUT_DIR/commit_info.txt" << EOF
 Commit Hash: $LAST_COMMIT
-Commit Date: $(git show -s --format=%ci $LAST_COMMIT)
-Commit Author: $(git show -s --format=%an $LAST_COMMIT)
-Commit Message: $(git show -s --format=%s $LAST_COMMIT)
+Commit Date: $(git show -s --format=%ci $LAST_COMMIT 2>/dev/null || echo "N/A")
+Commit Author: $(git show -s --format=%an $LAST_COMMIT 2>/dev/null || echo "N/A")
+Commit Message: $(git show -s --format=%s $LAST_COMMIT 2>/dev/null || echo "N/A")
 Archive Created: $(date)
 Archive Name: $ZIP_NAME
 EOF

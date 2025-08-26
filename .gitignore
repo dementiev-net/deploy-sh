@@ -1,6 +1,7 @@
 # Log files
 *.log
 log.txt
+commit_info.txt
 debug.log
 
 # JetBrains IDE
