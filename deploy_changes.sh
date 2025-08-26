@@ -18,22 +18,29 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+
+НЕ РАСПАКОВЫВАЕТ!!!!!!!!!!!!!!!!!!!!!!!
+
+
 # =====================================================
 # ФУНКЦИИ ДЛЯ ВЫВОДА СООБЩЕНИЙ
 # =====================================================
 log_info() {
+    local msg="$(date '+%Y-%m-%d %H:%M:%S') [INFO] $1"
+    echo "$msg" >> "$LOG_FILE"
     echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${GREEN}[INFO]${NC} $1"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] $1" >> "$LOG_FILE"
 }
 
 log_warning() {
+    local msg="$(date '+%Y-%m-%d %H:%M:%S') [WARNING] $1"
+    echo "$msg" >> "$LOG_FILE"
     echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${YELLOW}[WARNING]${NC} $1"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [WARNING] $1" >> "$LOG_FILE"
 }
 
 log_error() {
+    local msg="$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1"
+    echo "$msg" >> "$LOG_FILE"
     echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${RED}[ERROR]${NC} $1"
-    echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_FILE"
 }
 
 log_question() {
@@ -143,7 +150,9 @@ if ! unzip -q "$ZIP_FILE" -d "$TEMP_DIR"; then
 fi
 
 # Получаем список всех файлов из архива
-FILES_TO_DEPLOY=$(find "$TEMP_DIR" -type f -exec realpath --relative-to="$TEMP_DIR" {} \;)
+# (Проблема в том, что realpath --relative-to может работать по-разному на macOS и Linux)
+# FILES_TO_DEPLOY=$(find "$TEMP_DIR" -type f -exec realpath --relative-to="$TEMP_DIR" {} \;)
+FILES_TO_DEPLOY=$(cd "$TEMP_DIR" && find . -type f | sed 's|^\./||')
 
 # Проверяем каждый файл и спрашиваем разрешение на перезапись
 for file in $FILES_TO_DEPLOY; do
