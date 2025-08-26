@@ -51,10 +51,23 @@ create_backup() {
     local backup_timestamp=$(date +%Y%m%d_%H%M%S)
     local backup_file="$BACKUP_DIR/$(basename "$file_path")_$backup_timestamp"
     
-    mkdir -p "$BACKUP_DIR"
-    
-    if cp "$file_path" "$backup_file" 2>/dev/null; then
-        log_info "Создан бэкап: $backup_file"
+    # Создаем директорию для бэкапов если её нет
+    if ! mkdir -p "$BACKUP_DIR"; then
+        log_error "Не удалось создать директорию для бэкапов: $BACKUP_DIR"
+        return 1
+    fi
+
+    # Проверяем существование исходного файла
+    if [ ! -f "$file_path" ]; then
+        log_error "Исходный файл не существует: $file_path"
+        return 1
+    fi
+
+    log_info "Создание бэкапа: $(basename "$file_path") -> $(basename "$backup_file")"
+
+    # Копируем файл в бэкап
+    if cp "$file_path" "$backup_file"; then
+        log_info "Бэкап создан: $backup_file"
         return 0
     else
         log_error "Не удалось создать бэкап для $file_path"
@@ -162,14 +175,13 @@ for file in $FILES_TO_DEPLOY; do
         
         # Показываем различия если возможно
         if command -v diff >/dev/null 2>&1; then
-            echo -e "\n${YELLOW}Различия между файлами:${NC}"
+            echo -e "Различия между файлами:"
             if ! diff -u "$target_file" "$source_file"; then
                 echo "Файлы отличаются"
             else
                 log_info "Файлы идентичны"
                 continue
             fi
-            echo ""
         fi
         
         if confirm_action "Перезаписать $target_file?" "y"; then
@@ -213,7 +225,12 @@ fi
 
 log_info "Деплой завершен!"
 log_info "Лог сохранен в: $LOG_FILE"
-log_info "Бэкапы сохранены в: $BACKUP_DIR"
+
+if [ -d "$BACKUP_DIR" ] && [ "$(ls -A "$BACKUP_DIR" 2>/dev/null)" ]; then
+    log_info "Бэкапы сохранены в: $BACKUP_DIR"
+else
+    log_info "Бэкапов не создавалось (новые файлы или идентичные файлы)"
+fi
 
 # Показываем статистику
 echo ""
