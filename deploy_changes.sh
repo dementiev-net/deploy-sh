@@ -22,21 +22,18 @@ NC='\033[0m' # No Color
 # ФУНКЦИИ ДЛЯ ВЫВОДА СООБЩЕНИЙ
 # =====================================================
 log_info() {
-    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] [INFO] $1"
-    echo -e "${GREEN}$msg${NC}"
-    echo "$msg" >> "$LOG_FILE"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${GREEN}[INFO]${NC} $1"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] $1" >> "$LOG_FILE"
 }
 
 log_warning() {
-    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] [WARNING] $1"
-    echo -e "${YELLOW}$msg${NC}"
-    echo "$msg" >> "$LOG_FILE"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${YELLOW}[WARNING]${NC} $1"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [WARNING] $1" >> "$LOG_FILE"
 }
 
 log_error() {
-    local msg="[$(date '+%Y-%m-%d %H:%M:%S')] [ERROR] $1"
-    echo -e "${RED}$msg${NC}"
-    echo "$msg" >> "$LOG_FILE"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${RED}[ERROR]${NC} $1"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1" >> "$LOG_FILE"
 }
 
 log_question() {
@@ -215,7 +212,7 @@ log_info "Бэкапы сохранены в: $BACKUP_DIR"
 
 # Показываем статистику
 echo ""
-echo -e "${GREEN}=== СТАТИСТИКА ДЕПЛОЯ ===${NC}"
+echo "=== СТАТИСТИКА ДЕПЛОЯ ==="
 echo "ZIP файл: $ZIP_FILE"
 echo "Целевая директория: $TARGET_DIR"
 echo "Время деплоя: $(date)"

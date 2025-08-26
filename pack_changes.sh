@@ -21,15 +21,15 @@ NC='\033[0m' # No Color
 # ФУНКЦИИ ДЛЯ ВЫВОДА СООБЩЕНИЙ
 # =====================================================
 log_info() {
-    echo -e "${GREEN}[INFO]${NC} $1"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${GREEN}[INFO]${NC} $1"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${YELLOW}[WARNING]${NC} $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "$(date '+%Y-%m-%d %H:%M:%S') ${RED}[ERROR]${NC} $1"
 }
 
 # =====================================================
